@@ -77,6 +77,7 @@ class _FlatmateScreenState extends State<FlatmateScreen> {
                                   cleaning: listing['cleaningBill'] ?? "000",
                                   water: listing['waterBill'] ?? "000",
                                   securityBill: listing['securityMoney'] ?? "000",
+                              propertyId: listing['propertyId'],
                                 )));
                   },
                   child: CardLarge(

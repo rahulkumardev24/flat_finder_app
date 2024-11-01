@@ -26,13 +26,15 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController rentController = TextEditingController();
   final TextEditingController securityMoneyController = TextEditingController();
-  final TextEditingController electricityBillController = TextEditingController();
+  final TextEditingController electricityBillController =
+      TextEditingController();
   final TextEditingController waterBillController = TextEditingController();
   final TextEditingController cleaningBillController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController otherDetailsController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  bool isLoading = false;
 
   // Function to select date
   Future<void> _selectDate(BuildContext context) async {
@@ -100,6 +102,9 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
         await ref.putFile(File(image.path));
         String downloadUrl = await ref.getDownloadURL();
         imageUrls.add(downloadUrl);
+        setState(() {
+          isLoading = true;
+        });
       } catch (e) {
         print("Error uploading image: $e");
       }
@@ -131,9 +136,9 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
         widget.imageFromAddScreen == null ||
         widget.imageFromAddScreen!.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all the details") ,
+        const SnackBar(
+          content: Text("Please fill all the details"),
         ),
-
       );
 
       return;
@@ -144,8 +149,8 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
 
     // Upload images and get their URLs
     List<String> imageUrls = await _uploadImages(widget.imageFromAddScreen!);
-    String propertyId = FirebaseFirestore.instance.collection('properties').doc().id;
-
+    String propertyId =
+        FirebaseFirestore.instance.collection('properties').doc().id;
 
     // Prepare property details
     Map<String, dynamic> propertyDetails = {
@@ -180,7 +185,12 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Property details posted successfully')),
       );
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNavigationTenant(selectedIndex: 4,))) ;
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const BottomNavigationTenant(
+                    selectedIndex: 4,
+                  )));
     } catch (e) {
       print("Error posting details: $e");
       ScaffoldMessenger.of(context).showSnackBar(
@@ -188,7 +198,6 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +331,7 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
                       decoration: InputDecoration(
                         hintText: "Available From",
                         filled: true,
-                        fillColor:Colors.grey.shade300,
+                        fillColor: Colors.grey.shade300,
                         border: const OutlineInputBorder(
                           borderSide: BorderSide.none,
                         ),
@@ -331,7 +340,9 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
 
                 /// rent
                 CustomTextField(
@@ -403,10 +414,16 @@ class _AddDetailsScreenState extends State<AddDetailsScreen> {
                 const SizedBox(height: 15),
 
                 /// post button ---------------------------------------
-                FullWidthButton(
-                  onPressed: _postDetails,
-                  text: 'Post Details',
-                ),
+                isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : FullWidthButton(
+                        onPressed: _postDetails,
+                        text: 'Post Details',
+                      ),
+                ///
+
               ],
             ),
           ),

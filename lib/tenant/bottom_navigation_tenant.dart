@@ -31,7 +31,7 @@ class _BottomNavigationTenantState extends State<BottomNavigationTenant> {
     const ChatScreen(),
     const AddScreen(),
     const SavedScreen(),
-    const ProfileScreen(),
+    const  ProfileScreen(),
   ];
 
   @override

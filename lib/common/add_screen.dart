@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flat_finder/common/add_details_screen.dart';
 import 'package:flat_finder/theme/colors.dart';
+import 'package:flat_finder/widgets/my_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,6 +17,7 @@ class AddScreen extends StatefulWidget {
 class _AddScreenState extends State<AddScreen> {
   final ImagePicker _picker = ImagePicker(); // Object to manage media picking from camera or gallery
   List<XFile>? _selectedMedia = []; // List to store selected images
+  bool isLoading = false ;
 
   @override
   void initState() {
@@ -50,6 +52,9 @@ class _AddScreenState extends State<AddScreen> {
         final snapshot = await uploadTask;
         final downloadUrl = await snapshot.ref.getDownloadURL();
         imageUrls.add(downloadUrl);
+        setState(() {
+          isLoading = true ;
+        });
       } catch (e) {
         print("Failed to upload image: $e");
       }
@@ -60,6 +65,9 @@ class _AddScreenState extends State<AddScreen> {
   // Handle the "Next" button press
   Future<void> handleNextButtonPress() async {
     if (_selectedMedia != null && _selectedMedia!.isNotEmpty) {
+      setState(() {
+        isLoading = true ;
+      });
       try {
         // Upload images and get their URLs
         List<String> imageUrls = await uploadImages(_selectedMedia!);
@@ -98,7 +106,7 @@ class _AddScreenState extends State<AddScreen> {
               fontFamily: "Poppins-Regular"),
         ),
         actions: [
-          TextButton(
+         isLoading ? const Center(child: CircularProgressIndicator(),) :  TextButton(
             onPressed: handleNextButtonPress, // Handle the button press
             child: Text(
               "Next",

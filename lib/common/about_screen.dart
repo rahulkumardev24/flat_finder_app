@@ -2,6 +2,7 @@ import 'package:flat_finder/widgets/my_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// created by Rahul ------------------->
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
 

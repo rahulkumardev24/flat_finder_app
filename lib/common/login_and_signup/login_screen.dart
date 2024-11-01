@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
   bool isVisible = false;
+  bool isLoading = false;
 
   /// firebase authService instance -> Rahul
   AuthService authService = AuthService();
@@ -44,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final user = await authService.login(email, password);
     if (user != null) {
-          final accountType = await authService.getAccountType(user.uid);
+      isLoading = true;
+      setState(() {});
+      final accountType = await authService.getAccountType(user.uid);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -203,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 40,
                       ),
-                      // this sizedbox contains password field
+                      // this sizedBox contains password field
                       SizedBox(
                         width: 350,
                         child: CustomTextField(
@@ -229,10 +232,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 40,
                       ),
-                      FullWidthButton(
-                        text: "Login",
-                        onPressed: _login,
-                      ),
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : FullWidthButton(
+                              text: "Login",
+                              onPressed: _login,
+                            ),
                       const SizedBox(
                         height: 40,
                       ),

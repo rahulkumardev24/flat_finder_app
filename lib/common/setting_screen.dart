@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../theme/colors.dart';
 
+/// create by ---> Rahul
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 

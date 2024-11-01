@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flat_finder/common/chat_screen.dart';
+import 'package:flat_finder/common/profile_screen.dart';
 import 'package:flat_finder/landlord/bottom_navigation_landlord.dart';
 import 'package:flat_finder/tenant/bottom_navigation_tenant.dart';
 import 'package:flat_finder/widgets/my_icon_button.dart';
@@ -28,6 +30,7 @@ class DetailViewScreen extends StatefulWidget {
   final String? electricity;
   final String? water;
   final String? cleaning;
+  final String propertyId;
 
   const DetailViewScreen({
     Key? key,
@@ -48,6 +51,7 @@ class DetailViewScreen extends StatefulWidget {
     this.water,
     this.cleaning,
     required this.securityBill,
+    required this.propertyId
   }) : super(key: key);
 
   @override
@@ -58,24 +62,44 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
   // State variable to track the selected image
   late XFile selectedImage;
 
+  // To store user details
+  Map<String, dynamic>? userData;
+
   @override
   void initState() {
     super.initState();
-
-    /// Initialize the main
+    // Fetch user details for the property
+    getUserDetails(widget.propertyId);
+    // Initialize the main image
     selectedImage = widget.media[0];
   }
 
+// Fetch owner details using ownerId, not propertyId
+  Future<void> getUserDetails(String propertyId) async {
+    var userDoc = await FirebaseFirestore.instance.collection('properties').doc(propertyId).get();
+    if (userDoc.exists) {
+      setState(() {
+        userData = userDoc.data();
+      });
+    } else {
+      setState(() {
+        userData = {};
+      });
+    }
+  }
+
+
   ///  --------------------------- here we use media query -------------------------------///
-  MediaQueryData? mqData ;
+  MediaQueryData? mqData;
+
   @override
   Widget build(BuildContext context) {
-    mqData = MediaQuery.of(context) ;
+    mqData = MediaQuery.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: MyIconButton(mIcon: Icons.arrow_back_ios_rounded, onPress: (){
+          child: MyIconButton(mIcon: Icons.arrow_back_ios_rounded, onPress: () {
             Navigator.pop(context);
           }),
         ),
@@ -101,17 +125,13 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
 
             /// ------------------------ GRID VIEW IMAGE ---------------------///
             SizedBox(
-              height: mqData!.size.height*0.11,
+              height: mqData!.size.height * 0.11,
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12.0),
                 child: GridView.builder(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    childAspectRatio: 3 / 3,
-                    crossAxisSpacing: 11,
-                    mainAxisSpacing: 11
-                  ),
+                      crossAxisCount: 1, childAspectRatio: 3 / 3, crossAxisSpacing: 11, mainAxisSpacing: 11),
                   itemCount: widget.media.length,
                   itemBuilder: (context, index) {
                     return GestureDetector(
@@ -128,9 +148,7 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                               ? [const BoxShadow(color: Colors.black, blurRadius: 3)]
                               : null,
                           border: Border.all(
-                            color: selectedImage == widget.media[index]
-                                ? Colors.green
-                                : Colors.transparent,
+                            color: selectedImage == widget.media[index] ? Colors.green : Colors.transparent,
                             width: 2,
                           ),
                           image: DecorationImage(
@@ -164,14 +182,12 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                     // Location and rent
                     Row(
                       children: [
-                        SvgPicture.asset("assets/icons/location_outlined.svg",
-                            width: 15, height: 25),
+                        SvgPicture.asset("assets/icons/location_outlined.svg", width: 15, height: 25),
                         const SizedBox(width: 7),
                         Text(
                           widget.location,
                           style: TextStyle(
-                              color: AppColors().darkGrey,
-                              fontFamily: "Poppins-Semibold"),
+                              color: AppColors().darkGrey, fontFamily: "Poppins-Semibold"),
                         ),
                         const Spacer(),
                         Text("Rent - ₹${widget.rent}")
@@ -179,17 +195,18 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                     ),
 
                     const Divider(thickness: 2),
-                    // Landlord profile
+                    ///--------------------- user post profile----------------------///
                     Row(
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundImage: FileImage(
-                              File(widget.dp.path)), // Use XFile for dp
+                          backgroundImage: userData != null && userData!['profileImage'] != null
+                              ? NetworkImage(userData!['profileImageUrl'])
+                              : FileImage(File(widget.dp.path)) as ImageProvider,
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          "Abhimanyu Kumar",
+                          userData != null && userData!['name'] != null ? userData!['name'] : "Rahul Kumar ",
                           style: TextStyle(
                               color: AppColors().darkGreen,
                               fontFamily: "Poppins-Semibold",
@@ -198,35 +215,38 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                         const Spacer(),
                         OutlinedButton(
                           onPressed: () {
-                            // Send to profile screen of landlord
+                            // Navigate to user profile screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(
+                                  userId: widget.propertyId,
+                                ),
+                              ),
+                            );
                           },
                           style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.all(AppColors().green70),
-                            side: WidgetStateProperty.all(BorderSide(
-                                color: AppColors().darkGreen, width: 2)),
+                            backgroundColor: WidgetStateProperty.all(AppColors().green70),
+                            side: WidgetStateProperty.all(BorderSide(color: AppColors().darkGreen, width: 2)),
                           ),
                           child: Row(
                             children: [
                               Text("View",
                                   style: TextStyle(
-                                      color: AppColors().darkGreen,
-                                      fontFamily: "Poppins-Semibold")),
-                              Icon(Icons.keyboard_arrow_right,
-                                  color: AppColors().darkGreen),
+                                      color: AppColors().darkGreen, fontFamily: "Poppins-Semibold")),
+                              Icon(Icons.keyboard_arrow_right, color: AppColors().darkGreen),
                             ],
                           ),
-                        ),
+                        )
                       ],
                     ),
+
                     const Divider(thickness: 2),
                     // Details section
                     Text(
                       "Details",
                       style: TextStyle(
-                          color: AppColors().darkGreen,
-                          fontSize: 25,
-                          fontFamily: "Poppins-Semibold"),
+                          color: AppColors().darkGreen, fontSize: 25, fontFamily: "Poppins-Semibold"),
                     ),
                     Text(widget.desc),
                     // Additional property details
@@ -258,96 +278,94 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                             Text("    :   ${widget.allowed}"),
                             Text("    :   ${widget.floor}"),
                             Text("    :   ${widget.securityBill}"),
-                            Text(
-                                "    :   ${widget.electricity?.isEmpty ?? true ? "000" : widget.electricity}"),
-                            Text(
-                                "    :   ${widget.water?.isEmpty ?? true ? "000" : widget.cleaning}"),
-                            Text(
-                                "    :   ${widget.cleaning?.isEmpty ?? true ? "000" : widget.cleaning}"),
+                            Text("    :   ${widget.electricity?.isEmpty ?? true ? "000" : widget.electricity}"),
+                            Text("    :   ${widget.water?.isEmpty ?? true ? "000" : widget.water}"),
+                            Text("    :   ${widget.cleaning?.isEmpty ?? true ? "000" : widget.cleaning}"),
                             Text("    :   ${widget.availability}"),
                           ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
+                    const SizedBox(height: 10,),
 
-            // Chat and Direction buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 150,
-                    child: OutlinedButton(
-                      onPressed: () {
-                        // Redirect user to the landlord's chat screen
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationTenant(selectedIndex: 1,)));
-                      },
-                      style: ButtonStyle(
-                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(11))),
-                        side: WidgetStateProperty.all(
-                            BorderSide(color: AppColors().darkBlue, width: 2)),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset("assets/icons/chat.svg",
-                              width: 30, height: 30),
-                          const SizedBox(width: 10),
-                          Text("Chat",
-                              style: TextStyle(
-                                  color: AppColors().blue,
-                                  fontFamily: "Poppins-Semibold",
-                                  fontSize: 20)),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  SizedBox(
-                    width: 150,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Redirect user to Google Maps with property location
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            WidgetStateProperty.all(AppColors().blue),
-                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(11))),
-                        side: WidgetStateProperty.all(
-                            BorderSide(color: AppColors().darkBlue, width: 2)),
-                      ),
-                      child: FittedBox(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Transform.translate(
-                              offset: const Offset(-10, 0),
-                              child: const Icon(Icons.directions,
-                                  color: Colors.white, size: 30),
-                            ),
-                            const Text("Direction",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "Poppins-Semibold",
-                                    fontSize: 20)),
-                          ],
+                    /// -------------------------- Chat Button ---------------------------///
+                // Chat and Direction buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // Redirect user to the landlord's chat screen
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNavigationTenant(selectedIndex: 1,)));
+                          },
+                          style: ButtonStyle(
+                            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(11))),
+                            side: WidgetStateProperty.all(
+                                BorderSide(color: AppColors().darkBlue, width: 2)),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset("assets/icons/chat.svg",
+                                  width: 30, height: 30),
+                              const SizedBox(width: 10),
+                              Text("Chat",
+                                  style: TextStyle(
+                                      color: AppColors().blue,
+                                      fontFamily: "Poppins-Semibold",
+                                      fontSize: 20)),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                      const Spacer(),
+                      SizedBox(
+                        width: 150,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Redirect user to Google Maps with property location
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                            WidgetStateProperty.all(AppColors().blue),
+                            shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(11))),
+                            side: WidgetStateProperty.all(
+                                BorderSide(color: AppColors().darkBlue, width: 2)),
+                          ),
+                          child: FittedBox(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Transform.translate(
+                                  offset: const Offset(-10, 0),
+                                  child: const Icon(Icons.directions,
+                                      color: Colors.white, size: 30),
+                                ),
+                                const Text("Direction",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Poppins-Semibold",
+                                        fontSize: 20)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
-                  // Display all media files in a list or grid
-                ],
+
+                    ],
+                ),
               ),
-            )
-          ]),
+                    const SizedBox(height: 10,),
+                ]
+            ),
+          ))]),
         ),
       ),
     );

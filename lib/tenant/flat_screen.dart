@@ -73,7 +73,7 @@ class _FlatScreenState extends State<FlatScreen> {
                     electricity: listing['electricityBill'] ?? "000",
                     cleaning:  listing['cleaningBill'] ?? "000",
                     water:  listing['waterBill'] ?? "000",
-                    securityBill:  listing['securityMoney'] ?? "000",
+                    securityBill:  listing['securityMoney'] ?? "000", propertyId: listing['propertyId'],
 
 
 

@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../theme/colors.dart';
 
+/// Created by Rahul ---------------->
 class HelpAndSupportScreen extends StatelessWidget {
   const HelpAndSupportScreen({Key? key}) : super(key: key);
 

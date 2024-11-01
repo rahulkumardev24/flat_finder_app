@@ -54,9 +54,9 @@ class _PgScreenState extends State<PgScreen> {
                   onTap: () {
                     // Convert image URLs to XFile
                     List<XFile> mediaFiles =
-                    (listing['imageUrls'] as List<dynamic>)
-                        .map((url) => XFile(url))
-                        .toList();
+                        (listing['imageUrls'] as List<dynamic>)
+                            .map((url) => XFile(url))
+                            .toList();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -66,7 +66,8 @@ class _PgScreenState extends State<PgScreen> {
                                   location: listing['address'],
                                   rent: listing['rent'].toString(),
                                   dp: XFile(listing['imageUrls'][0]),
-                                  desc: listing['otherDetails'] ?? 'No description available',
+                                  desc: listing['otherDetails'] ??
+                                      'No description available',
                                   type: listing['propertyType'],
                                   bedroom: listing['bedrooms'].toString(),
                                   bathroom: listing['bathrooms'].toString(),
@@ -74,10 +75,13 @@ class _PgScreenState extends State<PgScreen> {
                                   allowed: listing['allowed'],
                                   floor: listing['floor'].toString(),
                                   availability: listing['availableFrom'],
-                                  electricity: listing['electricityBill'] ?? "000",
+                                  electricity:
+                                      listing['electricityBill'] ?? "000",
                                   cleaning: listing['cleaningBill'] ?? "000",
                                   water: listing['waterBill'] ?? "000",
-                                  securityBill: listing['securityMoney'] ?? "000",
+                                  securityBill:
+                                      listing['securityMoney'] ?? "000",
+                                  propertyId: listing['propertyId'],
                                 )));
                   },
                   child: CardLarge(

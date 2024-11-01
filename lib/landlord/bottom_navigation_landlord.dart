@@ -8,7 +8,9 @@ import 'package:flat_finder/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationLandlord extends StatefulWidget {
-  const BottomNavigationLandlord({super.key});
+
+  final int? selectedIndex;
+  const BottomNavigationLandlord({super.key,  this.selectedIndex});
 
   @override
   State<BottomNavigationLandlord> createState() => _BottomNavigationLandlordState();
@@ -17,6 +19,11 @@ class BottomNavigationLandlord extends StatefulWidget {
 class _BottomNavigationLandlordState extends State<BottomNavigationLandlord> {
   // index value that will help to change the screen on the tap of different index of bottom navigation
   int _indexValue = 0;
+  @override
+  void initState() {
+    super.initState();
+    _indexValue = widget.selectedIndex!;
+  }
 
   // list of screen that is to be shown on the tap of each item
   final List<Widget> _screenList = [

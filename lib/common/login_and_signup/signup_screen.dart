@@ -21,13 +21,13 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController passController = TextEditingController();
   final TextEditingController confirmPassController = TextEditingController();
   var isVisible = false;
+  bool isLoading = false;
 
   /// radio button default value -> Rahul
   String accountType = "Renter";
   String? gender;
 
   /// sign up function with firebase -> Rahul
-
 
   Future<void> _signup() async {
     if (nameController.text.isEmpty ||
@@ -52,6 +52,9 @@ class _SignupScreenState extends State<SignupScreen> {
         );
 
         if (user != null) {
+          setState(() {
+            isLoading = true;
+          });
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Successfully Signed Up"),
@@ -84,7 +87,6 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -367,12 +369,16 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(
                           width: 350,
                           height: 50,
+
                           ///-------------------------------signup---------------------------------
-                          child: FullWidthButton(
-                            text: "Sign Up",
-                            /// Here we call _signup function -> Rahul
-                            onPressed: _signup,
-                          )),
+                          child: isLoading
+                              ? const Center(child: CircularProgressIndicator())
+                              : FullWidthButton(
+                                  text: "Sign Up",
+
+                                  /// Here we call _signup function -> Rahul
+                                  onPressed: _signup,
+                                )),
                       const SizedBox(
                         height: 10,
                       ),
@@ -383,7 +389,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      // this sizedbox contains google and facebook buttons
+                      // this sizedBox contains google and facebook buttons
                       SizedBox(
                         width: 350,
                         height: 50,

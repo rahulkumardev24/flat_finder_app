@@ -14,7 +14,8 @@ import '../widgets/edit_profile_screen.dart';
 import '../widgets/profile_navigation_drawer.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String? userId;
+  const ProfileScreen({Key? key, this.userId}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _UserProfileScreenState();
@@ -548,7 +549,7 @@ class _UserProfileScreenState extends State<ProfileScreen> {
                                   cleaning: listing['cleaningBill'] ?? "000",
                                   water: listing['waterBill'] ?? "000",
                                   securityBill:
-                                      listing['securityMoney'] ?? "000",
+                                      listing['securityMoney'] ?? "000", propertyId: listing['propertyId'],
                                 )));
                   },
                   child: CardSmallSqure(
