@@ -90,7 +90,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mqDataWith = MediaQuery.of(context).size.width ;
+    final mqDataHeight = MediaQuery.of(context).size.height ;
     return Scaffold(
+
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -100,10 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 color: AppColors().green, // Setting custom color for background
                 child: Row(
                   children: [
-                    // Predefined button
-                    const BackButton(
-                      color: Colors.white,
-                    ),
+
                     const Spacer(),
                     Text(
                       "Already have an account ?",
@@ -131,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
               // This container contain the big title text "Flat Finder"
               Container(
                 width: double.infinity,
-                height: 150,
+                height: mqDataHeight * 0.15,
                 color: AppColors().green,
                 child: const Center(
                   child: Padding(
@@ -144,8 +145,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: Colors.white,
                           shadows: [
                             Shadow(
-                                offset: Offset(2.0, 5.0),
-                                blurRadius: 5.0,
+                                offset: Offset(2.0, 2.0),
+                                blurRadius: 1.0,
                                 color: Colors.black54)
                           ]),
                     ),
@@ -165,15 +166,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
-                          offset: const Offset(0, -10),
-                          blurRadius: 10,
+
                         )
                       ]),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(
-                        height: 10,
+                        height: 6,
                       ),
                       const Text(
                         "Get started for free",

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../landlord/bottom_navigation_landlord.dart';
 import '../../theme/colors.dart';
+import '../../utils/custom_text_style.dart';
 import '../../widgets/custom_text_field.dart';
 
 import '../../widgets/full_width_button.dart';
@@ -97,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final mqDataWith = MediaQuery.of(context).size.width ;
     final mqDataHeight = MediaQuery.of(context).size.height ;
     return Scaffold(
+      backgroundColor: Colors.white,
       ///-------------------------------BODY------------------------------------------
       body: SafeArea(
         child: SingleChildScrollView(
@@ -107,10 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 color: AppColors().green, // Setting custom color for background
                 child: Row(
                   children: [
-                    // Predefined button
-                    const BackButton(
-                      color: Colors.white,
-                    ),
+
                     const Spacer(),
                     Text(
                       "Don't have an account ?",
@@ -138,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // This container contain the big title text "Flat Finder"
               Container(
                 width: double.infinity,
-                height: 200,
+                height: mqDataHeight * 0.2,
                 color: AppColors().green,
                 child: const Center(
                   child: Text(
@@ -149,8 +148,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: Colors.white,
                         shadows: [
                           Shadow(
-                              offset: Offset(2.0, 5.0),
-                              blurRadius: 5.0,
+                              offset: Offset(2.0, 2.0),
+                              blurRadius: 1.0,
                               color: Colors.black54)
                         ]),
                   ),
@@ -168,23 +167,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.2),
-                          offset: const Offset(0, -10),
-                          blurRadius: 10,
+
                         )
                       ]),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
-                      const Text(
+                       Text(
                         "Welcome back",
-                        style: TextStyle(
-                            fontSize: 30, fontFamily: "Poppins-Semibold"),
+                        style: myTextStyle36(),
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: 12,
                       ),
                       Text(
                         "Enter your details below",
@@ -194,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: AppColors().grey),
                       ),
                       const SizedBox(
-                        height: 40,
+                        height: 11,
                       ),
                       // this sizedbox contains email field
                       SizedBox(
