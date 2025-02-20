@@ -91,8 +91,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final mqDataWith = MediaQuery.of(context).size.width ;
+    final mqDataHeight = MediaQuery.of(context).size.height ;
     return Scaffold(
       ///-------------------------------BODY------------------------------------------
       body: SafeArea(
