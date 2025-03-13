@@ -9,6 +9,7 @@ import 'package:flat_finder/widgets/my_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme/colors.dart';
 
@@ -335,7 +336,7 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                BottomNavigationTenant(
+                                                const BottomNavigationTenant(
                                                   selectedIndex: 1,
                                                 )));
                                   },
@@ -391,11 +392,18 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                                           child: const Icon(Icons.directions,
                                               color: Colors.white, size: 30),
                                         ),
-                                        const Text("Direction",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "Poppins-Semibold",
-                                                fontSize: 20)),
+                                        ///---------------DIRECTION BUTTON-----------------///
+                                        InkWell(
+                                          onTap: (){
+                                            _openGoogleMaps(widget.location) ;
+
+                                          },
+                                          child: const Text("Direction",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Poppins-Semibold",
+                                                  fontSize: 20)),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -413,5 +421,16 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
         ),
       ),
     );
+  }
+  ///  Open Google Maps with Navigation
+  Future<void> _openGoogleMaps(String cityName) async {
+    // String googleUrl = "https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude";
+    String googleUrl = "https://www.google.com/maps/dir/?api=1&destination=$cityName";
+    Uri uri = Uri.parse(googleUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      throw "Could not open Google Maps";
+    }
   }
 }

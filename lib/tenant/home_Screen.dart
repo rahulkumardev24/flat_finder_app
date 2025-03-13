@@ -2,6 +2,7 @@ import 'package:flat_finder/tenant/flat_screen.dart';
 import 'package:flat_finder/tenant/flatmate_screen.dart';
 import 'package:flat_finder/tenant/pg_screen.dart';
 import 'package:flat_finder/tenant/search_screen.dart';
+import 'package:flat_finder/utils/custom_text_style.dart';
 import 'package:flat_finder/widgets/filter_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -67,12 +68,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 /// current local fetch
                                 Text(
-                                  currentLocation,
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins-Bold',
-                                  ),
+                                  currentLocation.toString().split(" ").take(3).join(" "),
+                                  style: myTextStyle15(),
                                 ),
                               ],
                             ),
@@ -145,8 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         indicator: BoxDecoration(
                           color: AppColors().blue,
                           borderRadius: BorderRadius.circular(11),
-                          border:
-                              Border.all(width: 2, color: Colors.amberAccent),
+
                         ),
                         indicatorSize: TabBarIndicatorSize.label,
                         dividerHeight: 0,
