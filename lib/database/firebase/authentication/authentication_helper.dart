@@ -50,6 +50,8 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  FirebaseAuth getInstance() => _auth;
+
   Future<User?> signUp(String name, String email, String password, String accountType, String gender) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
@@ -83,5 +85,10 @@ class AuthService {
       print(e.toString());
       return null;
     }
+  }
+
+  // Log out the current user
+  Future<void> logOut() async {
+    await _auth.signOut();
   }
 }

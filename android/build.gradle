@@ -1,3 +1,14 @@
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0' // Update AGP version
+    }
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 allprojects {
     repositories {
         google()

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flat_finder/common/about_screen.dart';
 import 'package:flat_finder/common/help_and_support_screen.dart';
 import 'package:flat_finder/common/setting_screen.dart';
+import 'package:flat_finder/database/firebase/authentication/authentication_helper.dart';
 import 'package:flat_finder/theme/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -313,7 +314,10 @@ class _NavigationDrawerState extends State<ProfileNavigationDrawer> {
             padding: const EdgeInsets.all(20.0),
             child: OutlinedButton(
                 onPressed: () {
-                  /// ---------> Logout the user, change the flag value in shared preferences and navigate to login screen <--------- ///
+                  AuthService().logOut();
+                  setState(() {
+
+                  });
                 },
 
                 style: OutlinedButton.styleFrom(

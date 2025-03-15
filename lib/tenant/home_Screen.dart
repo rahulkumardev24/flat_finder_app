@@ -32,11 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-          statusBarColor: AppColors().green,
-          statusBarIconBrightness: Brightness.light),
-    );
+
     return SafeArea(
       child: Scaffold(
         body: Column(
