@@ -115,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
             showTime: true,
             avatarBuilder: (user, onAvatarTap, onAvatarLongPress) => Center(
               child: Image.asset(
-                "assets/images/logo.png",
+                "assets/images/logo_nobg.png",
                 height: 40,
                 width: 40,
               ),
