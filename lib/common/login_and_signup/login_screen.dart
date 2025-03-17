@@ -1,3 +1,4 @@
+import 'package:flat_finder/common/login_and_signup/forget_password_screen.dart';
 import 'package:flat_finder/common/login_and_signup/signup_screen.dart';
 import 'package:flat_finder/database/firebase/authentication/authentication_helper.dart';
 import 'package:flat_finder/tenant/bottom_navigation_tenant.dart';
@@ -230,6 +231,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : const Icon(Icons.visibility_off_outlined),
                             )),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: TextButton(onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgetPasswordScreen()));
+                          }, child: Text("Forget Password ?", style: myTextStyle15(fontColor: AppColors().blue),)),
+                        ),
+                      ),
                       const SizedBox(
                         height: 40,
                       ),
@@ -241,10 +251,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                       const SizedBox(
                         height: 40,
-                      ),
-                      const Text("Forgot your password ?"),
-                      const SizedBox(
-                        height: 20,
                       ),
                       Text(
                         "------------------------- Or login with -------------------------",
