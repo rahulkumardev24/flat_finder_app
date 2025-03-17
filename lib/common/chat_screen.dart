@@ -132,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: CircleAvatar(
                           backgroundColor:
                           user.id == mySelf.id ? Colors.black45 : Colors.black45,
-                          child: Image.asset("assets/images/logo.png")
+                          child: Image.asset("assets/images/logo_nobg.png")
                       ),
                     ),
                   ),
