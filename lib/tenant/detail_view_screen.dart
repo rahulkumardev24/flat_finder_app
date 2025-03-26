@@ -115,15 +115,18 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
         child: Center(
           child: Column(children: [
             ///--------------------------- Display the main image
-            SizedBox(
-              width: double.infinity,
-              height: 400,
-              child: Image.network(
-                selectedImage.path,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Center(child: Text('Image not available'));
-                },
+            Hero(
+              tag: 'card-open',
+              child: SizedBox(
+                width: double.infinity,
+                height: 400,
+                child: Image.network(
+                  selectedImage.path,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(child: Text('Image not available'));
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 10),

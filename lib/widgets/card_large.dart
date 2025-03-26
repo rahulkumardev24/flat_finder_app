@@ -93,10 +93,13 @@ class _CardLargeState extends State<CardLarge> {
                 child: Stack(
                   children: [
                     // Main image of the card
-                    Image.network(
-                      widget.imageUrl,
-                      width: double.maxFinite,
-                      fit: BoxFit.cover,
+                    Hero(
+                      tag: 'open-card',
+                      child: Image.network(
+                        widget.imageUrl,
+                        width: double.maxFinite,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     // Bookmark button
                     Positioned(
