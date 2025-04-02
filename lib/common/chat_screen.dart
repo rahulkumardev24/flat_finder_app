@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flat_finder/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:dash_chat_2/dash_chat_2.dart';
@@ -89,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         centerTitle: true,
 
-        backgroundColor: Colors.tealAccent,
+        backgroundColor: AppColors().green,
       ),
       body: Stack(
         children: [
@@ -107,10 +108,10 @@ class _ChatScreenState extends State<ChatScreen> {
                     alwaysShowSend: true,
                     autocorrect: true,
                     inputTextStyle: const TextStyle(fontSize: 16),
-                    cursorStyle: const CursorStyle(color: Colors.tealAccent),
+                    cursorStyle: const CursorStyle(color: Colors.black),
                     inputDecoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.tealAccent.shade100,
+                      fillColor: AppColors().green70.withAlpha(90),
                       hintText: "Type a message...",
                       hintStyle: myTextStyle15(),
                       contentPadding:
@@ -131,8 +132,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: CircleAvatar(
                           backgroundColor:
-                          user.id == mySelf.id ? Colors.black45 : Colors.black45,
-                          child: Image.asset("assets/images/logo.png")
+                          user.id == mySelf.id ? Colors.black45 : Colors.white,
+                          child: Image.asset("assets/images/logo_nobg.png")
                       ),
                     ),
                   ),

@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                         width: 30,
                         height: 30,
-                        child: SvgPicture.asset('assets/icons/location.svg')),
+                        child: SvgPicture.asset('assets/icons/location.svg',)),
                     // Address section
                     Padding(
                       padding: const EdgeInsets.only(left: 5, top: 8),
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     // search button
                     IconButton(
                         onPressed: () {
