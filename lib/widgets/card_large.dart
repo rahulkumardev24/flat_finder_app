@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flat_finder/theme/colors.dart';
+import 'package:flat_finder/utils/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -74,7 +75,6 @@ class _CardLargeState extends State<CardLarge> {
       padding: const EdgeInsets.all(10.0),
       child: SizedBox(
         width: double.maxFinite,
-        height: mqData.size.height * 0.4,
         child: Card(
           elevation: 5,
           child: Column(
@@ -136,12 +136,9 @@ class _CardLargeState extends State<CardLarge> {
                                 height: 28,
                               ),
                               const SizedBox(width: 2),
-                              const Text(
+                               Text(
                                 "2.6 km",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontFamily: "Poppins-Semibold",
-                                ),
+                               style: myTextStyle18(),
                               ),
                             ],
                           ),
@@ -162,21 +159,14 @@ class _CardLargeState extends State<CardLarge> {
                       child: Text(
                         widget.title.toUpperCase(),
                         maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 25,
-                          fontFamily: "Poppins-Bold",
-                        ),
+                        style: myTextStyle24(fontWeight: FontWeight.bold),
                       ),
                     ),
                     Row(
                       children: [
                         Text(
                           widget.location,
-                          style: TextStyle(
-                            color: AppColors().darkGrey,
-                            fontFamily: "Poppins-Medium",
-                            fontSize: 14,
-                          ),
+                          style:myTextStyle18(fontColor: AppColors().darkGrey),
                         ),
                         const Spacer(),
                         Text(
@@ -192,11 +182,7 @@ class _CardLargeState extends State<CardLarge> {
                     Text(
                       widget.desc,
                       maxLines: 2,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontFamily: "Poppins-Medium",
-                        color: AppColors().darkGrey,
-                      ),
+                      style: myTextStyle15(fontColor: AppColors().darkGrey),
                     ),
                   ],
                 ),

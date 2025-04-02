@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flat_finder/tenant/flat_screen.dart';
 import 'package:flat_finder/tenant/flatmate_screen.dart';
 import 'package:flat_finder/tenant/pg_screen.dart';
@@ -6,7 +7,6 @@ import 'package:flat_finder/utils/custom_text_style.dart';
 import 'package:flat_finder/widgets/filter_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /// --- For locations--- ///
   String currentLocation = "location...";
   String localLocation = "location...";
 
@@ -28,16 +29,76 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _checkPermissions();
+    _setUpFirebaseMessaging();
+  }
+
+  /// here we create function to get FCM Token
+  /// here we create function to get FCM Token
+  void _setUpFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    /// get FCM Token
+    String? token = await messaging.getToken();
+    print("MY FCM Token : $token");
+
+    ///  if app is close then message is show in notifications bar
+    /// if message is open then show in dialog box
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("Foreground Notifications : ${message.notification?.title}");
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+                title: Text(
+                  message.notification?.title ?? "No Title Found",
+                  style: myTextStyle24(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
+                content: Text(
+                  message.notification?.body ?? "No body found",
+                  style: myTextStyle18(fontColor: Colors.black54),
+                  textAlign: TextAlign.start,
+                ),
+                icon: Image.asset("assets/icons/notification_icon.png"),
+                actions: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(width: 2, color: Colors.blue)),
+                      child: Text(
+                        "OK",
+                        style: myTextStyle18(),
+                      ))
+                ],
+              ));
+    });
+
+    /// When a notification is tapped and the app is in the background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("Notification Clicked : ${message.notification?.title}");
+    });
+
+    /// if the app was opened from a terminated state via a notification
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        print(
+            "App is Opened from Terminated State : ${message.notification?.title}");
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
       child: Scaffold(
         body: Column(
           children: [
-            // AppBar section
+            /// AppBar section
             SizedBox(
               width: double.infinity,
               height: 80,
@@ -64,7 +125,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 /// current local fetch
                                 Text(
-                                  currentLocation.toString().split(" ").take(3).join(" "),
+                                  currentLocation
+                                      .toString()
+                                      .split(" ")
+                                      .take(3)
+                                      .join(" "),
                                   style: myTextStyle15(),
                                 ),
                               ],
@@ -98,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    // --------------------- Filter button ------------------ ///
+                    /// --------------------- Filter button ------------------ ///
                     Container(
                       width: 40,
                       height: 40,
@@ -124,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            // Tab section
+            /// Tab section
             Expanded(
               child: DefaultTabController(
                 length: 3,
@@ -133,18 +198,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                       child: TabBar(
-                        labelColor: Colors.black,
-                        unselectedLabelColor: AppColors().green,
-                        indicator: BoxDecoration(
-                          color: AppColors().blue,
-                          borderRadius: BorderRadius.circular(11),
-
-                        ),
+                        labelColor: AppColors().green,
+                        unselectedLabelColor: Colors.black54,
+                        unselectedLabelStyle: myTextStyle15(),
                         indicatorSize: TabBarIndicatorSize.label,
                         dividerHeight: 0,
+                        indicatorColor: Colors.blue,
                         labelPadding: const EdgeInsets.only(left: 5, right: 5),
                         tabs: [
-                          // Flat tab
+                          /// Flat tab
                           Tab(
                             child: Container(
                               height: double.maxFinite,
@@ -166,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          // PG tab
+                          /// PG tab
                           Tab(
                             child: Container(
                               height: double.maxFinite,
@@ -188,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          // Flatmate tab
+                          /// Flatmate tab
                           Tab(
                             child: Container(
                               height: double.maxFinite,
@@ -237,9 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
 // function used to style tab button
   static BoxDecoration tabButtonStyle() {
     return BoxDecoration(
-      color: Colors.transparent, // Unselected background
-      borderRadius: BorderRadius.circular(11),
-      border: Border.all(width: 2, color: AppColors().green),
+      color: Colors.transparent, // Unselected background ,
     );
   }
 

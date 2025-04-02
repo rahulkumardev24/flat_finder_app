@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flat_finder/common/about_screen.dart';
 import 'package:flat_finder/common/add_details_screen.dart';
 import 'package:flat_finder/common/add_screen.dart';
@@ -33,13 +34,25 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: AppColors().green)
   );
+  /// for orientations
   await SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown
       ]
   );
+
+  /// Background & Terminated state listener
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
 }
+
+/// --- For notifications --- ///
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Background Notifications Received : ${message.notification?.title}" ) ;
+}
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

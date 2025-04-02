@@ -5,6 +5,7 @@ import 'package:flat_finder/common/chat_screen.dart';
 import 'package:flat_finder/common/profile_screen.dart';
 import 'package:flat_finder/landlord/bottom_navigation_landlord.dart';
 import 'package:flat_finder/tenant/bottom_navigation_tenant.dart';
+import 'package:flat_finder/utils/custom_text_style.dart';
 import 'package:flat_finder/widgets/my_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -108,13 +109,13 @@ class _DetailViewScreenState extends State<DetailViewScreen> {
                 Navigator.pop(context);
               }),
         ),
-        title: Text(widget.title),
+        title: Text(widget.title , style: myTextStyle24(fontWeight: FontWeight.bold),),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(children: [
-            ///--------------------------- Display the main image
+            ///--------------------------- Display the main image ------ ///
             SizedBox(
               width: double.infinity,
               height: 400,

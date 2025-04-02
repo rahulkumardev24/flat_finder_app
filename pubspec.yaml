@@ -67,6 +67,7 @@ dependencies:
 
   # Icons
   cupertino_icons: ^1.0.8
+  firebase_messaging: ^15.2.4
 
 
 

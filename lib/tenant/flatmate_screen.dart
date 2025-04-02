@@ -64,8 +64,7 @@ class _FlatmateScreenState extends State<FlatmateScreen> {
                                   location: listing['address'],
                                   rent: listing['rent'].toString(),
                                   dp: XFile(listing['imageUrls'][0]),
-                                  desc: listing['otherDetails'] ??
-                                      'No description available',
+                                  desc: listing['otherDetails'] ?? 'No description available',
                                   type: listing['propertyType'],
                                   bedroom: listing['bedrooms'].toString(),
                                   bathroom: listing['bathrooms'].toString(),
